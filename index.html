@@ -1,115 +1,92 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AnimeMotion AI</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09090d">
+<title>AnimeMotion AI — Video Studio</title>
 <style>
-:root{color-scheme:dark;--bg:#090b12;--panel:#131827;--line:#263149;--green:#8cff45;--muted:#9aa7bd}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#20351f 0,transparent 35%),var(--bg);color:#f4f7fb;font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
-header{padding:22px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px}
-.logo{font-weight:900;letter-spacing:.04em;font-size:20px}.logo span{color:var(--green)}.tag{font-size:12px;color:var(--green);border:1px solid #466b39;border-radius:30px;padding:5px 10px}
-main{max-width:1100px;margin:30px auto;padding:0 16px 50px}.hero{margin-bottom:24px}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:0 0 10px}.hero p{color:var(--muted);margin:0;max-width:720px}
-.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.card{background:linear-gradient(160deg,#171f30,#101522);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003}.card h2{font-size:17px;margin:0 0 16px}
-label{display:block;font-size:13px;color:#c6d0df;margin:14px 0 7px}textarea,input,select{width:100%;background:#090e19;border:1px solid #303d55;color:#f4f7fb;border-radius:11px;padding:12px;font:inherit;outline:none}textarea:focus,input:focus,select:focus{border-color:var(--green)}textarea{min-height:140px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:11px;background:var(--green);color:#10150d;font-weight:800;padding:12px 16px;cursor:pointer}.btn.secondary{background:#202b40;color:#eaf0fa;border:1px solid #34435f}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.hint{color:var(--muted);font-size:12px;margin-top:8px}.notice{border:1px solid #65512b;background:#2b2416;color:#f4d99d;padding:12px;border-radius:12px;font-size:13px;margin-top:16px}
-.drop{border:1px dashed #52617d;border-radius:12px;padding:16px;text-align:center;color:var(--muted);cursor:pointer}.drop img{max-width:100%;max-height:170px;display:block;margin:10px auto 0;border-radius:9px}
-.preview{min-height:300px;background:linear-gradient(135deg,#101a29,#192638 55%,#162016);border:1px solid #33425c;border-radius:14px;display:grid;place-items:center;overflow:hidden;position:relative}.preview:before,.preview:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;filter:blur(35px);opacity:.22}.preview:before{background:#7dff35;left:-80px;bottom:-100px}.preview:after{background:#7d7bff;right:-80px;top:-100px}.empty{text-align:center;color:var(--muted);padding:25px;z-index:1}.empty strong{display:block;color:#fff;font-size:18px;margin-bottom:6px}
-.status{font-size:13px;color:var(--muted);margin-top:12px;min-height:40px}.meter{height:7px;background:#263149;border-radius:9px;overflow:hidden;margin-top:10px}.meter i{display:block;width:0;height:100%;background:var(--green);transition:width .4s}
-footer{color:#758198;text-align:center;font-size:12px;margin-top:22px}
-@media(max-width:760px){.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}header{align-items:flex-start}}
+:root{color-scheme:dark;--bg:#09090d;--panel:#12131b;--line:#292b3a;--muted:#999caf;--text:#f5f5fa;--accent:#c5ff55;--violet:#a98cff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#242039 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1240px;margin:auto;padding:0 22px 56px}
+.top{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#09090de8;backdrop-filter:blur(18px);z-index:5;margin:0 -22px;padding:0 22px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.07em}.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--accent),#8dffad);display:grid;place-items:center;color:#10120c;font-weight:1000;font-size:19px}.brand span{color:var(--accent)}
+.topright{display:flex;align-items:center;gap:10px}.pill{border:1px solid #ffffff20;color:#c8cad6;border-radius:30px;padding:7px 12px;font-size:12px}.avatar{width:34px;height:34px;border-radius:50%;background:#242638;display:grid;place-items:center;color:var(--accent);font-weight:800}
+.hero{padding:52px 0 28px;text-align:center}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:.2em;font-weight:800}.hero h1{font-size:clamp(32px,6vw,58px);line-height:1.02;letter-spacing:-.045em;margin:14px 0 13px}.hero h1 em{font-style:normal;background:linear-gradient(90deg,#d9ff8d,#a88bff);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:620px;margin:0 auto;color:var(--muted);font-size:15px}
+.workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.95fr);gap:18px;align-items:start}.panel{background:linear-gradient(160deg,#171823,#11121a);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 18px 60px #0003}.panelhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.panelhead h2{font-size:16px;margin:0}.subtle{font-size:12px;color:var(--muted)}
+textarea{width:100%;min-height:145px;resize:vertical;border:1px solid #343648;border-radius:14px;background:#0c0d14;color:var(--text);padding:15px;outline:none;line-height:1.55}textarea:focus,input:focus,select:focus{border-color:#b9f85b;box-shadow:0 0 0 3px #b9f85b18;outline:none}.prompttools{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;color:var(--muted);font-size:12px}.textbtn{border:0;background:none;color:#d3d5e0;padding:4px}.upload{margin-top:17px;border:1px dashed #4a4c60;border-radius:14px;padding:13px;display:flex;align-items:center;gap:12px;background:#ffffff04;cursor:pointer}.uploadicon{width:38px;height:38px;border-radius:11px;background:#26263a;display:grid;place-items:center;font-size:18px}.upload strong{display:block;font-size:13px}.upload small{color:var(--muted);font-size:11px}.upload input{display:none}
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:17px}.field label{display:block;font-size:11px;color:var(--muted);margin:0 0 7px 2px}.field select{width:100%;background:#0c0d14;color:#f3f3f7;border:1px solid #343648;border-radius:11px;padding:11px 8px;font-size:12px}
+.styles{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.style{border:1px solid #35374a;border-radius:30px;padding:7px 12px;background:#11121a;color:#c9cbd7;font-size:12px}.style.active{border-color:var(--accent);background:#c5ff5518;color:var(--accent)}
+.generate{width:100%;border:0;border-radius:13px;padding:15px;margin-top:19px;background:linear-gradient(100deg,#d7ff80,#aaff59);color:#10130b;font-weight:900;letter-spacing:.02em}.micro{color:var(--muted);font-size:11px;text-align:center;margin:10px 0 0}
+.preview{aspect-ratio:16/10;border-radius:15px;overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 60%,#373051 0,#191a2b 34%,#0b0d15 75%);border:1px solid #39394c;display:grid;place-items:center}
+.preview:before,.preview:after{content:"";position:absolute;border:1px solid #c5ff5530;border-radius:50%;width:220px;height:220px;box-shadow:0 0 65px #a88bff20,inset 0 0 55px #a88bff14;animation:orbit 18s linear infinite}.preview:after{width:300px;height:300px;border-color:#a98cff25;animation-direction:reverse;animation-duration:26s}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.previewcontent{z-index:1;text-align:center;padding:20px}.playicon{width:54px;height:54px;border-radius:50%;border:1px solid #ffffff35;background:#ffffff12;display:grid;place-items:center;margin:0 auto 13px;font-size:20px}.previewcontent strong{display:block;font-size:14px}.previewcontent small{display:block;color:#a9aabd;margin-top:5px;font-size:11px}.previewtag{position:absolute;top:12px;left:12px;background:#090a10a8;border:1px solid #ffffff20;border-radius:20px;padding:5px 9px;font-size:10px;color:#ddd}.previewratio{position:absolute;right:12px;top:12px;color:#c5c6d2;font-size:10px}
+.state{margin-top:14px;padding:12px;border:1px solid #37384a;background:#10111a;border-radius:12px;color:#b8bac9;font-size:12px;min-height:48px}.state strong{color:var(--accent)}
+.sectiontitle{display:flex;align-items:center;justify-content:space-between;margin:30px 0 13px}.sectiontitle h2{font-size:17px;margin:0}.empty{border:1px dashed #343648;border-radius:15px;padding:23px;text-align:center;color:var(--muted);font-size:12px}.historyitem{border:1px solid #303244;border-radius:12px;padding:12px;margin-top:9px;background:#ffffff04}.historyitem strong{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.historyitem small{color:var(--muted);font-size:10px}
+.notice{margin-top:19px;border:1px solid #6c5a31;background:#2a2417;color:#ead9a7;border-radius:13px;padding:12px;font-size:11px;line-height:1.5}.notice b{color:#fff0bc}
+footer{border-top:1px solid #ffffff12;margin-top:38px;padding:20px 0;color:#77798c;font-size:11px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+@media(max-width:820px){.workspace{grid-template-columns:1fr}.hero{padding:38px 0 23px}.panel{padding:16px}.app{padding:0 14px 40px}.top{margin:0 -14px;padding:0 14px;height:66px}.settings{gap:7px}.field select{font-size:11px}}
+@media(max-width:390px){.settings{grid-template-columns:1fr 1fr}.field:last-child{grid-column:span 2}.hero p{font-size:13px}}
 </style>
 </head>
 <body>
-<header><div class="logo">ANIME<span>MOTION</span> AI</div><div class="tag">СТУДИЯ • DEMO</div></header>
-<main>
-<section class="hero"><h1>Преврати идею в аниме-сцену</h1><p>Рабочая оболочка студии: подготовь запрос, добавь референс и настрой будущий ролик. Для настоящей генерации нужно подключить видеомодель и её API.</p></section>
-<div class="layout">
-<section class="card">
-<h2>✦ Настройки сцены</h2>
-<label for="prompt">Опиши, что происходит в видео</label>
-<textarea id="prompt" placeholder="Например: два героя сходятся в эпичной битве на крыше города, камера облетает их, энергия сталкивается в центре..."></textarea>
-<div class="row">
-<div><label for="duration">Длительность</label><select id="duration"><option>5 секунд</option><option selected>10 секунд</option><option>15 секунд</option><option>20 секунд</option></select></div>
-<div><label for="ratio">Формат</label><select id="ratio"><option>16:9 — горизонтальный</option><option>9:16 — вертикальный</option><option>1:1 — квадрат</option></select></div>
-</div>
-<label>Изображение-референс (необязательно)</label>
-<label class="drop" for="image">Нажми, чтобы выбрать изображение<input id="image" type="file" accept="image/*" hidden><span id="fileLabel">PNG, JPG или WebP</span><img id="thumb" hidden alt="Предпросмотр референса"></label>
-<div class="actions"><button class="btn" id="prepare">Подготовить генерацию</button><button class="btn secondary" id="sample">Пример битвы</button></div>
-<div class="notice"><b>Важно:</b> это локальный прототип. Он подготавливает запрос и не притворяется, что уже сгенерировал видео. Для пробной генерации можно открыть публичное демо Wan 2.2 справа; оно работает отдельно от этой страницы и может быть перегружено.</div>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="mark">✦</div><div>ANIME<span>MOTION</span> AI</div></div>
+ <div class="topright"><div class="pill">VIDEO STUDIO · BETA</div><div class="avatar">A</div></div>
+</header>
+<section class="hero">
+ <div class="eyebrow">YOUR IMAGINATION, IN MOTION</div>
+ <h1>Создай видео<br><em>из одной идеи</em></h1>
+ <p>Опиши сцену, выбери визуальный стиль и параметры ролика. AnimeMotion подготовит проект для генерации.</p>
 </section>
-<section class="card">
-<h2>▣ Окно проекта</h2>
-<div class="preview" id="preview" style="display:block;padding:0"><canvas id="stage" width="960" height="540" style="width:100%;height:auto;display:block;background:#080d18"></canvas></div>
-<div class="status" id="status">Встроенная анимация · Demo mode</div><div class="meter"><i id="bar"></i></div>
-<div class="actions"><button class="btn" id="play">▶ Запустить анимацию</button><button class="btn secondary" id="record">Сохранить видео WebM</button><button class="btn secondary" id="copy" disabled>Скопировать промпт</button><button class="btn secondary" id="save" disabled>Скачать настройки</button></div>
-<p class="hint">Встроенная процедурная анимация работает прямо в браузере без оплаты и внешнего API. Это не обученная нейросеть, а аниматор с программными движениями и эффектами.</p>
+<main class="workspace">
+<section class="panel">
+ <div class="panelhead"><h2>✦ Новый видеопроект</h2><span class="subtle">01 / CREATE</span></div>
+ <textarea id="prompt" maxlength="2000" placeholder="Опиши видео, которое хочешь увидеть… Например: ночной Токио под дождём, камера плавно летит между неоновыми небоскрёбами, на крыше стоит герой в развевающемся плаще. Кинематографичный свет, плавное движение камеры."></textarea>
+ <div class="prompttools"><span><span id="count">0</span> / 2000 символов</span><button class="textbtn" id="clear">Очистить</button></div>
+ <label class="upload" for="reference"><div class="uploadicon">＋</div><div><strong>Добавить изображение-референс</strong><small id="fileinfo">PNG, JPG или WEBP · необязательно</small></div><input id="reference" type="file" accept="image/png,image/jpeg,image/webp"></label>
+ <div class="settings">
+  <div class="field"><label for="duration">ДЛИТЕЛЬНОСТЬ</label><select id="duration"><option value="5">5 секунд</option><option value="10" selected>10 секунд</option><option value="15">15 секунд</option></select></div>
+  <div class="field"><label for="ratio">ФОРМАТ</label><select id="ratio"><option value="16:9">16:9 · YouTube</option><option value="9:16">9:16 · TikTok</option><option value="1:1">1:1 · Square</option></select></div>
+  <div class="field"><label for="quality">КАЧЕСТВО</label><select id="quality"><option value="720p">720p</option><option value="1080p" selected>1080p</option><option value="4k">4K</option></select></div>
+ </div>
+ <div class="styles" id="styles">
+  <button class="style active" data-style="Anime">✦ Anime</button><button class="style" data-style="Cinematic">Cinematic</button><button class="style" data-style="Realistic">Realistic</button><button class="style" data-style="3D">3D</button><button class="style" data-style="Manga">Manga</button>
+ </div>
+ <button class="generate" id="generate">✦ &nbsp; GENERATE VIDEO</button>
+ <p class="micro">Настройки проекта · без автоматического списания средств</p>
+ <div class="notice"><b>Подключение генерации ещё не настроено.</b> Это новая оболочка студии. Чтобы кнопка создавала настоящее видео, нужно подключить сервер и API видеомодели. Не вводи секретные API-ключи на этой странице.</div>
 </section>
-</div>
-<footer>AnimeMotion AI · локальный прототип · ничего не отправляется на сервер</footer>
+<section class="panel">
+ <div class="panelhead"><h2>Предпросмотр</h2><span class="subtle">02 / PREVIEW</span></div>
+ <div class="preview" id="preview"><div class="previewtag">VIDEO CANVAS</div><div class="previewratio" id="previewratio">16:9</div><div class="previewcontent"><div class="playicon">▶</div><strong>Твоё видео появится здесь</strong><small>Сначала опиши свою идею</small></div></div>
+ <div class="state" id="status"><strong>Готов к созданию.</strong> Введи промпт, настрой видео и нажми Generate.</div>
+ <div class="sectiontitle"><h2>Недавние проекты</h2><button class="textbtn" id="clearhistory">Очистить</button></div>
+ <div id="history" class="empty">Здесь будут отображаться твои проекты.</div>
+</section>
 </main>
+<footer><span>© 2026 AnimeMotion AI</span><span>Creative video workspace · Beta</span><span>Сделано для создателей</span></footer>
+</div>
 <script>
-const $=id=>document.getElementById(id);let prepared='',raf=0,started=0,recorder=null,chunks=[];
-$('sample').onclick=()=>{$('prompt').value='Два бойца сходятся в эпичной битве на разрушенной городской арене. Первый герой использует зелёную энергию, второй окружён белой облачной аурой и молниями. Быстрые уклонения, обмен ударами, динамичные крупные планы, мощное столкновение энергий.'};
-$('image').onchange=e=>{const f=e.target.files[0];if(!f)return;$('fileLabel').textContent=f.name;const u=URL.createObjectURL(f);$('thumb').src=u;$('thumb').hidden=false};
-const canvas=$('stage'),ctx=canvas.getContext('2d');
-function fighter(x,y,t,color,side,phase){
-  ctx.save();ctx.translate(x,y);const bob=Math.sin(t*5+phase)*7, swing=Math.sin(t*4+phase);
-  ctx.shadowColor=color;ctx.shadowBlur=22;ctx.fillStyle=color;
-  // aura
-  for(let i=0;i<5;i++){ctx.globalAlpha=.08;ctx.beginPath();ctx.ellipse(0,-65,38+i*9,72+i*8,t*.4+i,0,Math.PI*2);ctx.fill()}
-  ctx.globalAlpha=1;ctx.shadowBlur=10;
-  // legs
-  ctx.strokeStyle='#111827';ctx.lineWidth=19;ctx.lineCap='round';
-  ctx.beginPath();ctx.moveTo(-10,-34+bob);ctx.lineTo(-20+swing*9,0);ctx.moveTo(10,-34+bob);ctx.lineTo(22-swing*8,0);ctx.stroke();
-  // torso
-  ctx.fillStyle=side===0?'#19a84a':'#f2f2f2';ctx.fillRect(-25,-112+bob,50,76);
-  // belt / details
-  ctx.fillStyle=side===0?'#182b1c':'#c92f39';ctx.fillRect(-25,-53+bob,50,9);
-  // head
-  ctx.fillStyle='#f2c7a5';ctx.beginPath();ctx.arc(0,-132+bob,22,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle=side===0?'#243a24':'#fff';ctx.beginPath();ctx.arc(0,-144+bob,23,Math.PI,Math.PI*2);ctx.fill();
-  // arms with punch motion
-  ctx.strokeStyle=side===0?'#f2c7a5':'#f0c3a1';ctx.lineWidth=17;
-  const punch=Math.max(0,Math.sin(t*2.2+phase));
-  ctx.beginPath();ctx.moveTo(-22,-98+bob);ctx.lineTo(-43,-70+bob);
-  ctx.moveTo(22,-98+bob);ctx.lineTo(43+punch*48,-86-punch*13+bob);ctx.stroke();
-  ctx.fillStyle=color;ctx.beginPath();ctx.arc(43+punch*48,-86-punch*13+bob,11,0,Math.PI*2);ctx.fill();
-  ctx.restore();
-}
-function draw(ts){
-  const t=(ts-started)/1000, w=canvas.width,h=canvas.height;
-  ctx.clearRect(0,0,w,h);
-  const bg=ctx.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#101a2d');bg.addColorStop(.55,'#171d2b');bg.addColorStop(1,'#241a35');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
-  // distant skyline
-  for(let i=0;i<16;i++){let x=i*66;let bh=80+(i*37%130);ctx.fillStyle=i%2?'#111a2b':'#202a3c';ctx.fillRect(x,h-bh,48,bh);ctx.fillStyle='#526078';for(let j=0;j<3;j++)ctx.fillRect(x+9+j*12,h-bh+15,5,8)}
-  // ground and radial streaks
-  ctx.fillStyle='#080d18';ctx.fillRect(0,430,w,110);
-  for(let i=0;i<18;i++){let x=(i*83+(t*90)%w)%w;ctx.strokeStyle='rgba(150,255,90,.13)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,430);ctx.lineTo(x-35,540);ctx.stroke()}
-  const clash=(Math.sin(t*2.2)>0.82), pulse=.5+.5*Math.sin(t*7);
-  fighter(285+Math.sin(t*1.5)*25,430,t,'#7dff42',0,0);
-  fighter(675-Math.sin(t*1.5)*25,430,t,'#f4f4f4',1,2);
-  // energy bolts
-  for(let i=0;i<9;i++){let a=t*2+i*Math.PI*2/9;ctx.strokeStyle=i%2?'#9aff54':'#b9caff';ctx.lineWidth=3;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=14;ctx.beginPath();ctx.moveTo(285+Math.cos(a)*45,300+Math.sin(a)*65);ctx.lineTo(285+Math.cos(a)* (65+Math.sin(t*8+i)*14),300+Math.sin(a)*95);ctx.stroke();ctx.beginPath();ctx.moveTo(675+Math.cos(a)*45,300+Math.sin(a)*65);ctx.lineTo(675+Math.cos(a)*(65+Math.cos(t*8+i)*14),300+Math.sin(a)*95);ctx.stroke()}
-  ctx.shadowBlur=0;
-  // central energy collision pulse
-  let radius=25+((t*100)%110);ctx.strokeStyle=`rgba(151,255,77,${.45-pulse*.2})`;ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,330,radius,0,Math.PI*2);ctx.stroke();
-  if(clash){ctx.fillStyle=`rgba(220,255,200,${.08+pulse*.18})`;ctx.fillRect(0,0,w,h)}
-  ctx.fillStyle='#f5f7ff';ctx.font='bold 30px system-ui';ctx.textAlign='center';ctx.fillText('ANIME BATTLE',480,52);
-  ctx.font='18px system-ui';ctx.fillStyle='#9cff61';ctx.fillText('GREEN ENERGY',285,500);ctx.fillStyle='#dce7ff';ctx.fillText('GEAR AURA',675,500);
-  ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.65)';ctx.font='14px system-ui';ctx.fillText('LIVE PROCEDURAL ANIMATION • DEMO',22,28);
-  raf=requestAnimationFrame(draw);
-}
-function start(){cancelAnimationFrame(raf);started=performance.now();raf=requestAnimationFrame(draw)}
-$('play').onclick=()=>{start();$('status').textContent='Анимация запущена прямо в браузере.'};
-$('prepare').onclick=()=>{const p=$('prompt').value.trim();if(!p){$('status').textContent='Сначала добавь описание сцены.';return}
-prepared=`${p}\nДлительность: ${$('duration').value}\nФормат: ${$('ratio').value}\nСтиль: плавная процедурная аниме-анимация, динамичная камера, энергетические эффекты.`;
-$('status').textContent='Сцена подготовлена. Запусти анимацию или сохрани видео WebM.';$('bar').style.width='100%';$('copy').disabled=false;$('save').disabled=false;start()};
-$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(prepared);$('status').textContent='Описание сцены скопировано.'}catch(e){$('status').textContent='Не удалось скопировать автоматически.'}};
-$('save').onclick=()=>{const blob=new Blob([JSON.stringify({prompt:prepared,duration:$('duration').value,ratio:$('ratio').value},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='animemotion-project.json';a.click();URL.revokeObjectURL(a.href)};
-$('record').onclick=()=>{if(!canvas.captureStream||!window.MediaRecorder){$('status').textContent='Запись видео не поддерживается этим браузером. Открой страницу в актуальном Chrome или Safari.';return}
-start();const stream=canvas.captureStream(30);let mime='video/webm;codecs=vp9';if(!MediaRecorder.isTypeSupported(mime))mime='video/webm';try{recorder=new MediaRecorder(stream,{mimeType:mime});chunks=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='animemotion-scene.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);$('status').textContent='Видео сохранено в формате WebM.'};recorder.start();$('status').textContent='Идёт запись 8 секунд…';setTimeout(()=>{if(recorder&&recorder.state==='recording')recorder.stop()},8000)}catch(e){$('status').textContent='Браузер не разрешил запись. Попробуй другой браузер.'}};
-start();
-// Draw an initial frame immediately so the preview is not blank while the first animation frame is scheduled.
-draw(performance.now());
+const $=id=>document.getElementById(id);let selectedStyle='Anime',referenceFile=null;
+$('prompt').addEventListener('input',()=>{$('count').textContent=$('prompt').value.length});
+$('clear').onclick=()=>{$('prompt').value='';$('count').textContent='0';$('prompt').focus()};
+$('styles').addEventListener('click',e=>{const b=e.target.closest('button[data-style]');if(!b)return;selectedStyle=b.dataset.style;document.querySelectorAll('.style').forEach(x=>x.classList.toggle('active',x===b))});
+$('ratio').onchange=()=>{$('previewratio').textContent=$('ratio').value};
+$('reference').onchange=e=>{referenceFile=e.target.files[0]||null;$('fileinfo').textContent=referenceFile?referenceFile.name+' · '+(referenceFile.size/1024/1024).toFixed(1)+' MB':'PNG, JPG или WEBP · необязательно'};
+const key='animemotion-history-v2';
+function renderHistory(){let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]')}catch{};const root=$('history');if(!items.length){root.className='empty';root.textContent='Здесь будут отображаться твои проекты.';return}root.className='';root.innerHTML='';items.slice(0,6).forEach(item=>{const el=document.createElement('div');el.className='historyitem';const strong=document.createElement('strong');strong.textContent=item.prompt;const small=document.createElement('small');small.textContent=item.style+' · '+item.duration+' сек · '+item.ratio+' · '+item.date;el.append(strong,small);root.append(el)})}
+$('clearhistory').onclick=()=>{localStorage.removeItem(key);renderHistory()};
+$('generate').onclick=async()=>{const prompt=$('prompt').value.trim();if(!prompt){$('status').innerHTML='<strong>Добавь описание.</strong> Напиши, какое видео хочешь создать.';$('prompt').focus();return}
+const project={prompt,style:selectedStyle,duration:$('duration').value,ratio:$('ratio').value,quality:$('quality').value,date:new Date().toLocaleString('ru-RU')};
+let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]')}catch{};items.unshift(project);localStorage.setItem(key,JSON.stringify(items.slice(0,10)));renderHistory();
+$('status').innerHTML='<strong>Проект подготовлен.</strong> Интерфейс сохранит параметры, но генератор видео пока не подключён. Для настоящего ролика нужен серверный API видеомодели.';
+try{const response=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...project,hasReference:!!referenceFile})});if(response.ok){const data=await response.json();$('status').innerHTML='<strong>Запрос отправлен.</strong> '+(data.message||'Проверяй статус генерации.')}else if(response.status!==404){$('status').innerHTML='<strong>Сервер ответил ошибкой.</strong> HTTP '+response.status+'. Проверь настройки генератора.'}}catch(e){}
+};
+renderHistory();
 </script>
-</body></html>
+</body>
+</html>
