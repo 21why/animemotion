@@ -1,6 +1,6 @@
 {
-  "name": "animemotion",
-  "version": "1.0.0",
+  "name": "animemotion-ai",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",

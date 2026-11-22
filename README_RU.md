@@ -1,20 +1,13 @@
-AnimeMotion AI — генератор изображений на Cloudflare Workers AI
+# AnimeMotion AI 2.0
 
-Файлы:
-- index.html — сайт генератора изображений
-- worker.js — API для генерации
-- wrangler.toml — конфигурация Worker и AI binding
-- package.json — Wrangler
+## Состав
+- `index.html` — сайт с IMAGE STUDIO и интерфейсом VIDEO STUDIO.
+- `worker.js` — рабочая генерация изображений через Cloudflare Workers AI / FLUX.1 Schnell; видео endpoint честно возвращает `503`, пока видеопровайдер не подключён.
+- `wrangler.toml` — конфигурация Worker и AI binding.
+- `package.json` — Wrangler.
 
-Замените в GitHub-репозитории 21why/animemotion файлы index.html, worker.js и wrangler.toml.
-package.json можно оставить существующий.
+## Важно
+Image Studio сохраняет текущую рабочую схему. Video Studio поддерживает выбор Text to Video / Image to Video и параметры интерфейса, но реальная генерация MP4 ещё не подключена. Никакая фальшивая генерация не запускается. Для реального видео потребуется отдельный видеопровайдер с доступным API и его настройка.
 
-После commit Cloudflare должен автоматически развернуть Worker из GitHub.
-Проверьте:
-https://animemotion.ebashynamid.workers.dev/api/health
-
-Ожидаемое поле: "imageGenerationConfigured": true.
-
-Модель: @cf/black-forest-labs/flux-1-schnell.
-Workers AI использует бесплатную дневную квоту, которая ограничена и может меняться. При исчерпании квоты запросы могут перестать выполняться до сброса.
-Не включайте платный план и не добавляйте способ оплаты ради проекта.
+## Обновление
+Заменить в GitHub репозитории `21why/animemotion` файлы `index.html` и `worker.js` содержимым из архива. `wrangler.toml` и `package.json` оставить/заменить соответствующими файлами из архива. После коммита дождаться публикации GitHub Pages и деплоя Worker.
