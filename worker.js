@@ -75,8 +75,7 @@ export default {
       try {
         const result = await env.AI.run(MODEL, {
           prompt: styles[style] + ", " + prompt,
-          steps: 4,
-          seed: Math.floor(Math.random() * 2147483647)
+          steps: 4
         });
 
         if (!result || !result.image) {
