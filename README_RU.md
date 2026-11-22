@@ -1,19 +1,20 @@
-AnimeMotion AI — Cloudflare Worker
+AnimeMotion AI — генератор изображений на Cloudflare Workers AI
 
 Файлы:
-- worker.js — серверные маршруты /api/health и /api/generate
-- wrangler.toml — конфигурация Cloudflare Worker
+- index.html — сайт генератора изображений
+- worker.js — API для генерации
+- wrangler.toml — конфигурация Worker и AI binding
+- package.json — Wrangler
 
-Публикация:
-1. Добавьте оба файла в корень репозитория 21why/animemotion.
-2. В Cloudflare выберите Workers & Pages → Create → Connect to Git.
-3. Выберите репозиторий 21why/animemotion.
-4. Build command оставьте пустым.
-5. Deploy command: npx wrangler deploy
-6. После публикации откройте https://ИМЯ-WORKER.ИМЯ-АККАУНТА.workers.dev/api/health
+Замените в GitHub-репозитории 21why/animemotion файлы index.html, worker.js и wrangler.toml.
+package.json можно оставить существующий.
 
-Важно:
-Сейчас сервер является безопасной заготовкой и НЕ генерирует видео.
-Он честно возвращает 503, пока не подключён поддерживаемый видеопровайдер и не реализован его API-адаптер.
-Не помещайте API-ключи в index.html, GitHub или этот архив.
-После публикации Worker его адрес потребуется подключить во frontend вместо относительного /api/generate.
+После commit Cloudflare должен автоматически развернуть Worker из GitHub.
+Проверьте:
+https://animemotion.ebashynamid.workers.dev/api/health
+
+Ожидаемое поле: "imageGenerationConfigured": true.
+
+Модель: @cf/black-forest-labs/flux-1-schnell.
+Workers AI использует бесплатную дневную квоту, которая ограничена и может меняться. При исчерпании квоты запросы могут перестать выполняться до сброса.
+Не включайте платный план и не добавляйте способ оплаты ради проекта.

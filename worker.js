@@ -1,23 +1,38 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Max-Age": "86400"
-};
+const ALLOWED_ORIGIN = "https://21why.github.io";
+const MODEL = "@cf/black-forest-labs/flux-1-schnell";
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
+function json(data, status = 200, origin = ALLOWED_ORIGIN) {
+  return new Response(JSON.stringify(data), {
     status,
-    headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" }
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": origin,
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Cache-Control": "no-store",
+      "Vary": "Origin"
+    }
   });
 }
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const origin = request.headers.get("Origin") || "";
+    const corsOrigin = origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN;
 
     if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: corsHeaders });
+      if (origin && origin !== ALLOWED_ORIGIN) return new Response(null, { status: 403 });
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": corsOrigin,
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "86400",
+          "Vary": "Origin"
+        }
+      });
     }
 
     if (url.pathname === "/api/health" && request.method === "GET") {
@@ -25,42 +40,66 @@ export default {
         ok: true,
         app: "AnimeMotion AI",
         server: "online",
-        videoProviderConfigured: Boolean(env.VIDEO_PROVIDER_URL && env.VIDEO_PROVIDER_KEY)
-      });
+        imageGenerationConfigured: Boolean(env.AI),
+        model: MODEL,
+        note: "Free usage is subject to Cloudflare Workers AI daily limits."
+      }, 200, corsOrigin);
     }
 
-    if (url.pathname === "/api/generate" && request.method === "POST") {
+    if (url.pathname === "/api/generate-image" && request.method === "POST") {
+      if (origin && origin !== ALLOWED_ORIGIN) {
+        return json({ ok: false, error: "origin_not_allowed" }, 403, corsOrigin);
+      }
+
       let body;
       try {
         body = await request.json();
       } catch {
-        return json({ ok: false, error: "invalid_json", message: "Отправь корректный JSON." }, 400);
+        return json({ ok: false, error: "invalid_json", message: "Отправлен некорректный JSON." }, 400, corsOrigin);
       }
 
       const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
-      if (!prompt) {
-        return json({ ok: false, error: "prompt_required", message: "Напиши описание видео." }, 400);
-      }
-      if (prompt.length > 2000) {
-        return json({ ok: false, error: "prompt_too_long", message: "Описание должно быть короче 2000 символов." }, 400);
-      }
+      if (!prompt) return json({ ok: false, error: "prompt_required", message: "Напиши описание изображения." }, 400, corsOrigin);
+      if (prompt.length > 1800) return json({ ok: false, error: "prompt_too_long", message: "Описание должно быть не длиннее 1800 символов." }, 400, corsOrigin);
+      if (!env.AI) return json({ ok: false, error: "ai_binding_missing", message: "В Cloudflare ещё не включена привязка Workers AI (AI)." }, 503, corsOrigin);
 
-      // Настоящая генерация будет добавлена после выбора и настройки видеопровайдера.
-      if (!env.VIDEO_PROVIDER_URL || !env.VIDEO_PROVIDER_KEY) {
+      const styles = {
+        Anime: "anime illustration, expressive character design, polished anime artwork",
+        Realistic: "photorealistic image, natural lighting, detailed textures",
+        "3D": "high quality 3D render, detailed materials, cinematic lighting",
+        Illustration: "beautiful digital illustration, refined composition",
+        Cinematic: "cinematic concept art, dramatic composition, atmospheric lighting"
+      };
+      const style = styles[body.style] ? body.style : "Anime";
+
+      try {
+        const result = await env.AI.run(MODEL, {
+          prompt: styles[style] + ", " + prompt,
+          steps: 4,
+          seed: Math.floor(Math.random() * 2147483647)
+        });
+
+        if (!result || !result.image) {
+          return json({ ok: false, error: "empty_model_response", message: "Модель не вернула изображение. Попробуй ещё раз." }, 502, corsOrigin);
+        }
+
+        return json({
+          ok: true,
+          model: MODEL,
+          style,
+          mimeType: "image/jpeg",
+          image: result.image
+        }, 200, corsOrigin);
+      } catch (error) {
         return json({
           ok: false,
-          error: "video_provider_not_configured",
-          message: "Сервер работает, но модель генерации видео ещё не подключена. Видео не создавалось."
-        }, 503);
+          error: "generation_failed",
+          message: "Генерация не удалась. Возможно, дневной бесплатный лимит исчерпан или модель временно недоступна.",
+          detail: String(error).slice(0, 300)
+        }, 502, corsOrigin);
       }
-
-      return json({
-        ok: false,
-        error: "provider_adapter_not_implemented",
-        message: "Данные провайдера настроены, но адаптер модели ещё не реализован. Генерация не запускалась."
-      }, 501);
     }
 
-    return json({ ok: false, error: "not_found" }, 404);
+    return json({ ok: false, error: "not_found" }, 404, corsOrigin);
   }
 };

@@ -1,92 +1,48 @@
-
 <!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#09090d">
-<title>AnimeMotion AI — Video Studio</title>
+<title>AnimeMotion AI — Image Studio</title>
 <style>
-:root{color-scheme:dark;--bg:#09090d;--panel:#12131b;--line:#292b3a;--muted:#999caf;--text:#f5f5fa;--accent:#c5ff55;--violet:#a98cff}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#242039 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1240px;margin:auto;padding:0 22px 56px}
-.top{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#09090de8;backdrop-filter:blur(18px);z-index:5;margin:0 -22px;padding:0 22px}
-.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.07em}.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--accent),#8dffad);display:grid;place-items:center;color:#10120c;font-weight:1000;font-size:19px}.brand span{color:var(--accent)}
-.topright{display:flex;align-items:center;gap:10px}.pill{border:1px solid #ffffff20;color:#c8cad6;border-radius:30px;padding:7px 12px;font-size:12px}.avatar{width:34px;height:34px;border-radius:50%;background:#242638;display:grid;place-items:center;color:var(--accent);font-weight:800}
-.hero{padding:52px 0 28px;text-align:center}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:.2em;font-weight:800}.hero h1{font-size:clamp(32px,6vw,58px);line-height:1.02;letter-spacing:-.045em;margin:14px 0 13px}.hero h1 em{font-style:normal;background:linear-gradient(90deg,#d9ff8d,#a88bff);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{max-width:620px;margin:0 auto;color:var(--muted);font-size:15px}
-.workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.95fr);gap:18px;align-items:start}.panel{background:linear-gradient(160deg,#171823,#11121a);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 18px 60px #0003}.panelhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.panelhead h2{font-size:16px;margin:0}.subtle{font-size:12px;color:var(--muted)}
-textarea{width:100%;min-height:145px;resize:vertical;border:1px solid #343648;border-radius:14px;background:#0c0d14;color:var(--text);padding:15px;outline:none;line-height:1.55}textarea:focus,input:focus,select:focus{border-color:#b9f85b;box-shadow:0 0 0 3px #b9f85b18;outline:none}.prompttools{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;color:var(--muted);font-size:12px}.textbtn{border:0;background:none;color:#d3d5e0;padding:4px}.upload{margin-top:17px;border:1px dashed #4a4c60;border-radius:14px;padding:13px;display:flex;align-items:center;gap:12px;background:#ffffff04;cursor:pointer}.uploadicon{width:38px;height:38px;border-radius:11px;background:#26263a;display:grid;place-items:center;font-size:18px}.upload strong{display:block;font-size:13px}.upload small{color:var(--muted);font-size:11px}.upload input{display:none}
-.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:17px}.field label{display:block;font-size:11px;color:var(--muted);margin:0 0 7px 2px}.field select{width:100%;background:#0c0d14;color:#f3f3f7;border:1px solid #343648;border-radius:11px;padding:11px 8px;font-size:12px}
-.styles{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.style{border:1px solid #35374a;border-radius:30px;padding:7px 12px;background:#11121a;color:#c9cbd7;font-size:12px}.style.active{border-color:var(--accent);background:#c5ff5518;color:var(--accent)}
-.generate{width:100%;border:0;border-radius:13px;padding:15px;margin-top:19px;background:linear-gradient(100deg,#d7ff80,#aaff59);color:#10130b;font-weight:900;letter-spacing:.02em}.micro{color:var(--muted);font-size:11px;text-align:center;margin:10px 0 0}
-.preview{aspect-ratio:16/10;border-radius:15px;overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 60%,#373051 0,#191a2b 34%,#0b0d15 75%);border:1px solid #39394c;display:grid;place-items:center}
-.preview:before,.preview:after{content:"";position:absolute;border:1px solid #c5ff5530;border-radius:50%;width:220px;height:220px;box-shadow:0 0 65px #a88bff20,inset 0 0 55px #a88bff14;animation:orbit 18s linear infinite}.preview:after{width:300px;height:300px;border-color:#a98cff25;animation-direction:reverse;animation-duration:26s}
-@keyframes orbit{to{transform:rotate(360deg)}}
-.previewcontent{z-index:1;text-align:center;padding:20px}.playicon{width:54px;height:54px;border-radius:50%;border:1px solid #ffffff35;background:#ffffff12;display:grid;place-items:center;margin:0 auto 13px;font-size:20px}.previewcontent strong{display:block;font-size:14px}.previewcontent small{display:block;color:#a9aabd;margin-top:5px;font-size:11px}.previewtag{position:absolute;top:12px;left:12px;background:#090a10a8;border:1px solid #ffffff20;border-radius:20px;padding:5px 9px;font-size:10px;color:#ddd}.previewratio{position:absolute;right:12px;top:12px;color:#c5c6d2;font-size:10px}
-.state{margin-top:14px;padding:12px;border:1px solid #37384a;background:#10111a;border-radius:12px;color:#b8bac9;font-size:12px;min-height:48px}.state strong{color:var(--accent)}
-.sectiontitle{display:flex;align-items:center;justify-content:space-between;margin:30px 0 13px}.sectiontitle h2{font-size:17px;margin:0}.empty{border:1px dashed #343648;border-radius:15px;padding:23px;text-align:center;color:var(--muted);font-size:12px}.historyitem{border:1px solid #303244;border-radius:12px;padding:12px;margin-top:9px;background:#ffffff04}.historyitem strong{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.historyitem small{color:var(--muted);font-size:10px}
-.notice{margin-top:19px;border:1px solid #6c5a31;background:#2a2417;color:#ead9a7;border-radius:13px;padding:12px;font-size:11px;line-height:1.5}.notice b{color:#fff0bc}
-footer{border-top:1px solid #ffffff12;margin-top:38px;padding:20px 0;color:#77798c;font-size:11px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-@media(max-width:820px){.workspace{grid-template-columns:1fr}.hero{padding:38px 0 23px}.panel{padding:16px}.app{padding:0 14px 40px}.top{margin:0 -14px;padding:0 14px;height:66px}.settings{gap:7px}.field select{font-size:11px}}
-@media(max-width:390px){.settings{grid-template-columns:1fr 1fr}.field:last-child{grid-column:span 2}.hero p{font-size:13px}}
+:root{color-scheme:dark;--bg:#09090d;--panel:#141520;--line:#2b2d3d;--muted:#a1a3b5;--text:#f7f7fb;--accent:#c9ff65}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#302348 0,transparent 40%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1160px;margin:auto;padding:0 20px 50px}.top{height:70px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff14}.brand{font-weight:900;letter-spacing:.07em}.brand span{color:var(--accent)}.pill{border:1px solid #ffffff24;color:#d2d3df;border-radius:30px;padding:6px 11px;font-size:11px}.hero{text-align:center;padding:48px 0 26px}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:.2em;font-weight:800}.hero h1{font-size:clamp(34px,7vw,60px);line-height:1.04;letter-spacing:-.05em;margin:13px 0}.hero h1 em{font-style:normal;color:var(--accent)}.hero p{color:var(--muted);max-width:650px;margin:auto}.layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:18px;align-items:start}.panel{background:linear-gradient(155deg,#191a27,#11121a);border:1px solid var(--line);border-radius:19px;padding:20px;box-shadow:0 18px 60px #0004}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.head h2{font-size:16px;margin:0}.muted{font-size:11px;color:var(--muted)}textarea{width:100%;min-height:170px;resize:vertical;border:1px solid #393b4e;border-radius:13px;background:#0c0d14;color:var(--text);padding:14px;outline:none;line-height:1.55}textarea:focus,select:focus{border-color:var(--accent);outline:none}.counter{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:7px}.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}.field label{display:block;color:var(--muted);font-size:10px;margin:0 0 6px 2px}.field select{width:100%;background:#0c0d14;color:var(--text);border:1px solid #393b4e;border-radius:10px;padding:11px;font-size:13px}.generate{width:100%;border:0;border-radius:12px;padding:15px;margin-top:18px;background:linear-gradient(100deg,#d9ff8c,#b0ff58);color:#11150b;font-weight:900}.generate:disabled{opacity:.55;cursor:wait}.status{margin-top:13px;border:1px solid #393b4e;border-radius:11px;background:#0e0f17;padding:12px;color:#c9cada;font-size:12px;min-height:45px}.status strong{color:var(--accent)}.canvas{min-height:320px;border:1px dashed #484a60;border-radius:14px;background:radial-gradient(ellipse at center,#29243b,#10111a 72%);display:grid;place-items:center;overflow:hidden}.canvas img{width:100%;height:auto;display:block}.placeholder{text-align:center;padding:25px;color:#a9aabc}.placeholder b{display:block;color:#f3f3f8;margin-bottom:6px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.actions a,.actions button{display:inline-block;text-decoration:none;border:1px solid #414357;border-radius:10px;background:#202130;color:#f4f4fa;padding:9px 12px;font-size:12px}.note{margin-top:17px;color:#b9b2d4;background:#211d30;border:1px solid #4a3d65;border-radius:11px;padding:11px;font-size:11px}.history{margin-top:25px}.history h3{font-size:14px}.historylist{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.thumb{background:#0e0f17;border:1px solid #343648;border-radius:10px;overflow:hidden}.thumb img{width:100%;display:block}.thumb small{display:block;padding:7px;color:var(--muted);font-size:10px}.hidden{display:none!important}footer{border-top:1px solid #ffffff14;margin-top:35px;padding:18px 0;color:#77798c;font-size:11px}@media(max-width:760px){.layout{grid-template-columns:1fr}.panel{padding:15px}.hero{padding:36px 0 22px}.app{padding:0 13px 35px}.canvas{min-height:240px}}
 </style>
 </head>
-<body>
-<div class="app">
-<header class="top">
- <div class="brand"><div class="mark">✦</div><div>ANIME<span>MOTION</span> AI</div></div>
- <div class="topright"><div class="pill">VIDEO STUDIO · BETA</div><div class="avatar">A</div></div>
-</header>
-<section class="hero">
- <div class="eyebrow">YOUR IMAGINATION, IN MOTION</div>
- <h1>Создай видео<br><em>из одной идеи</em></h1>
- <p>Опиши сцену, выбери визуальный стиль и параметры ролика. AnimeMotion подготовит проект для генерации.</p>
+<body><div class="app">
+<header class="top"><div class="brand">✦ ANIME<span>MOTION</span> AI</div><div class="pill">IMAGE STUDIO · FREE DAILY LIMIT</div></header>
+<section class="hero"><div class="eyebrow">YOUR IDEAS, BEAUTIFULLY RENDERED</div><h1>Создавай <em>изображения</em></h1><p>Универсальная генерация с акцентом на аниме. Опиши идею, выбери стиль и получи изображение.</p></section>
+<main class="layout">
+<section class="panel"><div class="head"><h2>✦ Новый арт</h2><span class="muted">01 / CREATE</span></div>
+<textarea id="prompt" maxlength="1800" placeholder="Например: волшебница с серебряными волосами стоит на крыше старого города ночью, светящиеся фонари, детализированный фон, выразительная аниме-иллюстрация..."></textarea>
+<div class="counter"><span id="count">0 / 1800</span><button id="clear" style="border:0;background:none;color:#c9ff65">Очистить</button></div>
+<div class="settings"><div class="field"><label for="style">СТИЛЬ</label><select id="style"><option>Anime</option><option>Realistic</option><option>3D</option><option>Illustration</option><option>Cinematic</option></select></div><div class="field"><label for="steps">ДЕТАЛИЗАЦИЯ</label><select id="steps"><option value="4">Быстро</option><option value="8">Больше деталей</option></select></div></div>
+<button class="generate" id="generate">✦ GENERATE IMAGE</button>
+<div class="status" id="status"><strong>Готово к созданию.</strong> Введи описание и нажми Generate Image.</div>
+<div class="note">Бесплатный доступ ограничен дневной квотой Cloudflare. Когда она закончится, генерация остановится до следующего сброса. Платная подписка не включается автоматически.</div>
 </section>
-<main class="workspace">
-<section class="panel">
- <div class="panelhead"><h2>✦ Новый видеопроект</h2><span class="subtle">01 / CREATE</span></div>
- <textarea id="prompt" maxlength="2000" placeholder="Опиши видео, которое хочешь увидеть… Например: ночной Токио под дождём, камера плавно летит между неоновыми небоскрёбами, на крыше стоит герой в развевающемся плаще. Кинематографичный свет, плавное движение камеры."></textarea>
- <div class="prompttools"><span><span id="count">0</span> / 2000 символов</span><button class="textbtn" id="clear">Очистить</button></div>
- <label class="upload" for="reference"><div class="uploadicon">＋</div><div><strong>Добавить изображение-референс</strong><small id="fileinfo">PNG, JPG или WEBP · необязательно</small></div><input id="reference" type="file" accept="image/png,image/jpeg,image/webp"></label>
- <div class="settings">
-  <div class="field"><label for="duration">ДЛИТЕЛЬНОСТЬ</label><select id="duration"><option value="5">5 секунд</option><option value="10" selected>10 секунд</option><option value="15">15 секунд</option></select></div>
-  <div class="field"><label for="ratio">ФОРМАТ</label><select id="ratio"><option value="16:9">16:9 · YouTube</option><option value="9:16">9:16 · TikTok</option><option value="1:1">1:1 · Square</option></select></div>
-  <div class="field"><label for="quality">КАЧЕСТВО</label><select id="quality"><option value="720p">720p</option><option value="1080p" selected>1080p</option><option value="4k">4K</option></select></div>
- </div>
- <div class="styles" id="styles">
-  <button class="style active" data-style="Anime">✦ Anime</button><button class="style" data-style="Cinematic">Cinematic</button><button class="style" data-style="Realistic">Realistic</button><button class="style" data-style="3D">3D</button><button class="style" data-style="Manga">Manga</button>
- </div>
- <button class="generate" id="generate">✦ &nbsp; GENERATE VIDEO</button>
- <p class="micro">Настройки проекта · без автоматического списания средств</p>
- <div class="notice"><b>Подключение генерации ещё не настроено.</b> Это новая оболочка студии. Чтобы кнопка создавала настоящее видео, нужно подключить сервер и API видеомодели. Не вводи секретные API-ключи на этой странице.</div>
-</section>
-<section class="panel">
- <div class="panelhead"><h2>Предпросмотр</h2><span class="subtle">02 / PREVIEW</span></div>
- <div class="preview" id="preview"><div class="previewtag">VIDEO CANVAS</div><div class="previewratio" id="previewratio">16:9</div><div class="previewcontent"><div class="playicon">▶</div><strong>Твоё видео появится здесь</strong><small>Сначала опиши свою идею</small></div></div>
- <div class="state" id="status"><strong>Готов к созданию.</strong> Введи промпт, настрой видео и нажми Generate.</div>
- <div class="sectiontitle"><h2>Недавние проекты</h2><button class="textbtn" id="clearhistory">Очистить</button></div>
- <div id="history" class="empty">Здесь будут отображаться твои проекты.</div>
-</section>
-</main>
-<footer><span>© 2026 AnimeMotion AI</span><span>Creative video workspace · Beta</span><span>Сделано для создателей</span></footer>
-</div>
+<section class="panel"><div class="head"><h2>Предпросмотр</h2><span class="muted">02 / RESULT</span></div><div class="canvas" id="canvas"><div class="placeholder"><b>Твой арт появится здесь</b><span>Сначала опиши изображение слева</span></div></div><div class="actions hidden" id="actions"><a id="download" download="animemotion-art.jpg">Скачать изображение</a><button id="new">Новое изображение</button></div><div class="history"><h3>Недавние изображения</h3><div class="historylist" id="history"></div></div></section>
+</main><footer>© 2026 AnimeMotion AI · Image Studio · Powered by Cloudflare Workers AI</footer></div>
 <script>
-const $=id=>document.getElementById(id);let selectedStyle='Anime',referenceFile=null;
-$('prompt').addEventListener('input',()=>{$('count').textContent=$('prompt').value.length});
-$('clear').onclick=()=>{$('prompt').value='';$('count').textContent='0';$('prompt').focus()};
-$('styles').addEventListener('click',e=>{const b=e.target.closest('button[data-style]');if(!b)return;selectedStyle=b.dataset.style;document.querySelectorAll('.style').forEach(x=>x.classList.toggle('active',x===b))});
-$('ratio').onchange=()=>{$('previewratio').textContent=$('ratio').value};
-$('reference').onchange=e=>{referenceFile=e.target.files[0]||null;$('fileinfo').textContent=referenceFile?referenceFile.name+' · '+(referenceFile.size/1024/1024).toFixed(1)+' MB':'PNG, JPG или WEBP · необязательно'};
-const key='animemotion-history-v2';
-function renderHistory(){let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]')}catch{};const root=$('history');if(!items.length){root.className='empty';root.textContent='Здесь будут отображаться твои проекты.';return}root.className='';root.innerHTML='';items.slice(0,6).forEach(item=>{const el=document.createElement('div');el.className='historyitem';const strong=document.createElement('strong');strong.textContent=item.prompt;const small=document.createElement('small');small.textContent=item.style+' · '+item.duration+' сек · '+item.ratio+' · '+item.date;el.append(strong,small);root.append(el)})}
-$('clearhistory').onclick=()=>{localStorage.removeItem(key);renderHistory()};
-$('generate').onclick=async()=>{const prompt=$('prompt').value.trim();if(!prompt){$('status').innerHTML='<strong>Добавь описание.</strong> Напиши, какое видео хочешь создать.';$('prompt').focus();return}
-const project={prompt,style:selectedStyle,duration:$('duration').value,ratio:$('ratio').value,quality:$('quality').value,date:new Date().toLocaleString('ru-RU')};
-let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]')}catch{};items.unshift(project);localStorage.setItem(key,JSON.stringify(items.slice(0,10)));renderHistory();
-$('status').innerHTML='<strong>Проект подготовлен.</strong> Интерфейс сохранит параметры, но генератор видео пока не подключён. Для настоящего ролика нужен серверный API видеомодели.';
-try{const response=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...project,hasReference:!!referenceFile})});if(response.ok){const data=await response.json();$('status').innerHTML='<strong>Запрос отправлен.</strong> '+(data.message||'Проверяй статус генерации.')}else if(response.status!==404){$('status').innerHTML='<strong>Сервер ответил ошибкой.</strong> HTTP '+response.status+'. Проверь настройки генератора.'}}catch(e){}
+const API="https://animemotion.ebashynamid.workers.dev";
+const $=id=>document.getElementById(id);
+function setStatus(title,msg){$("status").innerHTML="<strong>"+title+"</strong> "+msg}
+$("prompt").addEventListener("input",()=>{$("count").textContent=$("prompt").value.length+" / 1800"});
+$("clear").onclick=()=>{$("prompt").value="";$("count").textContent="0 / 1800"};
+$("new").onclick=()=>{$("prompt").focus();window.scrollTo({top:0,behavior:"smooth"})};
+function addHistory(src,prompt){const item=document.createElement("div");item.className="thumb";const img=document.createElement("img");img.src=src;img.alt="Созданное изображение";const small=document.createElement("small");small.textContent=prompt.slice(0,70);item.append(img,small);$("history").prepend(item);while($("history").children.length>4)$("history").lastElementChild.remove()}
+$("generate").onclick=async()=>{
+ const prompt=$("prompt").value.trim();if(!prompt){setStatus("Добавь описание.","Напиши, что нужно изобразить.");$("prompt").focus();return}
+ const btn=$("generate");btn.disabled=true;btn.textContent="ГЕНЕРАЦИЯ…";setStatus("Создаём изображение.","Подожди, пока модель обработает запрос.");
+ try{
+  const res=await fetch(API+"/api/generate-image",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,style:$("style").value,steps:4})});
+  const data=await res.json();
+  if(!res.ok||!data.ok)throw new Error(data.message||data.error||("HTTP "+res.status));
+  const src="data:"+(data.mimeType||"image/jpeg")+";base64,"+data.image;
+  $("canvas").innerHTML="";const img=document.createElement("img");img.src=src;img.alt="Изображение, созданное AnimeMotion AI";$("canvas").append(img);
+  $("download").href=src;$("actions").classList.remove("hidden");addHistory(src,prompt);setStatus("Готово!","Изображение создано моделью "+data.model+".");
+ }catch(err){setStatus("Не получилось.",String(err.message||err)+" Проверь дневную квоту и настройки Workers AI.")}
+ finally{btn.disabled=false;btn.textContent="✦ GENERATE IMAGE"}
 };
-renderHistory();
-</script>
-</body>
-</html>
+</script></body></html>
