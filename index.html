@@ -38,7 +38,7 @@ $("generate").onclick=async()=>{
  try{
   const res=await fetch(API+"/api/generate-image",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,style:$("style").value,steps:4})});
   const data=await res.json();
-  if(!res.ok||!data.ok)throw new Error(data.message||data.error||("HTTP "+res.status));
+   if(!res.ok||!data.ok)throw new Error((data.message||data.error||("HTTP "+res.status))+(data.detail?" Детали: "+data.detail:""));
   const src="data:"+(data.mimeType||"image/jpeg")+";base64,"+data.image;
   $("canvas").innerHTML="";const img=document.createElement("img");img.src=src;img.alt="Изображение, созданное AnimeMotion AI";$("canvas").append(img);
   $("download").href=src;$("actions").classList.remove("hidden");addHistory(src,prompt);setStatus("Готово!","Изображение создано моделью "+data.model+".");
