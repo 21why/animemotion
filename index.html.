@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AnimeMotion AI</title>
+<style>
+:root{color-scheme:dark;--bg:#090b12;--panel:#131827;--line:#263149;--green:#8cff45;--muted:#9aa7bd}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#20351f 0,transparent 35%),var(--bg);color:#f4f7fb;font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:22px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.logo{font-weight:900;letter-spacing:.04em;font-size:20px}.logo span{color:var(--green)}.tag{font-size:12px;color:var(--green);border:1px solid #466b39;border-radius:30px;padding:5px 10px}
+main{max-width:1100px;margin:30px auto;padding:0 16px 50px}.hero{margin-bottom:24px}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:0 0 10px}.hero p{color:var(--muted);margin:0;max-width:720px}
+.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.card{background:linear-gradient(160deg,#171f30,#101522);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003}.card h2{font-size:17px;margin:0 0 16px}
+label{display:block;font-size:13px;color:#c6d0df;margin:14px 0 7px}textarea,input,select{width:100%;background:#090e19;border:1px solid #303d55;color:#f4f7fb;border-radius:11px;padding:12px;font:inherit;outline:none}textarea:focus,input:focus,select:focus{border-color:var(--green)}textarea{min-height:140px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:11px;background:var(--green);color:#10150d;font-weight:800;padding:12px 16px;cursor:pointer}.btn.secondary{background:#202b40;color:#eaf0fa;border:1px solid #34435f}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.hint{color:var(--muted);font-size:12px;margin-top:8px}.notice{border:1px solid #65512b;background:#2b2416;color:#f4d99d;padding:12px;border-radius:12px;font-size:13px;margin-top:16px}
+.drop{border:1px dashed #52617d;border-radius:12px;padding:16px;text-align:center;color:var(--muted);cursor:pointer}.drop img{max-width:100%;max-height:170px;display:block;margin:10px auto 0;border-radius:9px}
+.preview{min-height:300px;background:linear-gradient(135deg,#101a29,#192638 55%,#162016);border:1px solid #33425c;border-radius:14px;display:grid;place-items:center;overflow:hidden;position:relative}.preview:before,.preview:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;filter:blur(35px);opacity:.22}.preview:before{background:#7dff35;left:-80px;bottom:-100px}.preview:after{background:#7d7bff;right:-80px;top:-100px}.empty{text-align:center;color:var(--muted);padding:25px;z-index:1}.empty strong{display:block;color:#fff;font-size:18px;margin-bottom:6px}
+.status{font-size:13px;color:var(--muted);margin-top:12px;min-height:40px}.meter{height:7px;background:#263149;border-radius:9px;overflow:hidden;margin-top:10px}.meter i{display:block;width:0;height:100%;background:var(--green);transition:width .4s}
+footer{color:#758198;text-align:center;font-size:12px;margin-top:22px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.row{grid-template-columns:1fr}header{align-items:flex-start}}
+</style>
+</head>
+<body>
+<header><div class="logo">ANIME<span>MOTION</span> AI</div><div class="tag">СТУДИЯ • DEMO</div></header>
+<main>
+<section class="hero"><h1>Преврати идею в аниме-сцену</h1><p>Рабочая оболочка студии: подготовь запрос, добавь референс и настрой будущий ролик. Для настоящей генерации нужно подключить видеомодель и её API.</p></section>
+<div class="layout">
+<section class="card">
+<h2>✦ Настройки сцены</h2>
+<label for="prompt">Опиши, что происходит в видео</label>
+<textarea id="prompt" placeholder="Например: два героя сходятся в эпичной битве на крыше города, камера облетает их, энергия сталкивается в центре..."></textarea>
+<div class="row">
+<div><label for="duration">Длительность</label><select id="duration"><option>5 секунд</option><option selected>10 секунд</option><option>15 секунд</option><option>20 секунд</option></select></div>
+<div><label for="ratio">Формат</label><select id="ratio"><option>16:9 — горизонтальный</option><option>9:16 — вертикальный</option><option>1:1 — квадрат</option></select></div>
+</div>
+<label>Изображение-референс (необязательно)</label>
+<label class="drop" for="image">Нажми, чтобы выбрать изображение<input id="image" type="file" accept="image/*" hidden><span id="fileLabel">PNG, JPG или WebP</span><img id="thumb" hidden alt="Предпросмотр референса"></label>
+<div class="actions"><button class="btn" id="prepare">Подготовить генерацию</button><button class="btn secondary" id="sample">Пример битвы</button></div>
+<div class="notice"><b>Важно:</b> это локальный прототип. Он подготавливает запрос и не притворяется, что уже сгенерировал видео. Для пробной генерации можно открыть публичное демо Wan 2.2 справа; оно работает отдельно от этой страницы и может быть перегружено.</div>
+</section>
+<section class="card">
+<h2>▣ Окно проекта</h2>
+<div class="preview" id="preview" style="display:block;padding:0"><canvas id="stage" width="960" height="540" style="width:100%;height:auto;display:block;background:#080d18"></canvas></div>
+<div class="status" id="status">Встроенная анимация · Demo mode</div><div class="meter"><i id="bar"></i></div>
+<div class="actions"><button class="btn" id="play">▶ Запустить анимацию</button><button class="btn secondary" id="record">Сохранить видео WebM</button><button class="btn secondary" id="copy" disabled>Скопировать промпт</button><button class="btn secondary" id="save" disabled>Скачать настройки</button></div>
+<p class="hint">Встроенная процедурная анимация работает прямо в браузере без оплаты и внешнего API. Это не обученная нейросеть, а аниматор с программными движениями и эффектами.</p>
+</section>
+</div>
+<footer>AnimeMotion AI · локальный прототип · ничего не отправляется на сервер</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);let prepared='',raf=0,started=0,recorder=null,chunks=[];
+$('sample').onclick=()=>{$('prompt').value='Два бойца сходятся в эпичной битве на разрушенной городской арене. Первый герой использует зелёную энергию, второй окружён белой облачной аурой и молниями. Быстрые уклонения, обмен ударами, динамичные крупные планы, мощное столкновение энергий.'};
+$('image').onchange=e=>{const f=e.target.files[0];if(!f)return;$('fileLabel').textContent=f.name;const u=URL.createObjectURL(f);$('thumb').src=u;$('thumb').hidden=false};
+const canvas=$('stage'),ctx=canvas.getContext('2d');
+function fighter(x,y,t,color,side,phase){
+  ctx.save();ctx.translate(x,y);const bob=Math.sin(t*5+phase)*7, swing=Math.sin(t*4+phase);
+  ctx.shadowColor=color;ctx.shadowBlur=22;ctx.fillStyle=color;
+  // aura
+  for(let i=0;i<5;i++){ctx.globalAlpha=.08;ctx.beginPath();ctx.ellipse(0,-65,38+i*9,72+i*8,t*.4+i,0,Math.PI*2);ctx.fill()}
+  ctx.globalAlpha=1;ctx.shadowBlur=10;
+  // legs
+  ctx.strokeStyle='#111827';ctx.lineWidth=19;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(-10,-34+bob);ctx.lineTo(-20+swing*9,0);ctx.moveTo(10,-34+bob);ctx.lineTo(22-swing*8,0);ctx.stroke();
+  // torso
+  ctx.fillStyle=side===0?'#19a84a':'#f2f2f2';ctx.fillRect(-25,-112+bob,50,76);
+  // belt / details
+  ctx.fillStyle=side===0?'#182b1c':'#c92f39';ctx.fillRect(-25,-53+bob,50,9);
+  // head
+  ctx.fillStyle='#f2c7a5';ctx.beginPath();ctx.arc(0,-132+bob,22,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=side===0?'#243a24':'#fff';ctx.beginPath();ctx.arc(0,-144+bob,23,Math.PI,Math.PI*2);ctx.fill();
+  // arms with punch motion
+  ctx.strokeStyle=side===0?'#f2c7a5':'#f0c3a1';ctx.lineWidth=17;
+  const punch=Math.max(0,Math.sin(t*2.2+phase));
+  ctx.beginPath();ctx.moveTo(-22,-98+bob);ctx.lineTo(-43,-70+bob);
+  ctx.moveTo(22,-98+bob);ctx.lineTo(43+punch*48,-86-punch*13+bob);ctx.stroke();
+  ctx.fillStyle=color;ctx.beginPath();ctx.arc(43+punch*48,-86-punch*13+bob,11,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+function draw(ts){
+  const t=(ts-started)/1000, w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const bg=ctx.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#101a2d');bg.addColorStop(.55,'#171d2b');bg.addColorStop(1,'#241a35');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+  // distant skyline
+  for(let i=0;i<16;i++){let x=i*66;let bh=80+(i*37%130);ctx.fillStyle=i%2?'#111a2b':'#202a3c';ctx.fillRect(x,h-bh,48,bh);ctx.fillStyle='#526078';for(let j=0;j<3;j++)ctx.fillRect(x+9+j*12,h-bh+15,5,8)}
+  // ground and radial streaks
+  ctx.fillStyle='#080d18';ctx.fillRect(0,430,w,110);
+  for(let i=0;i<18;i++){let x=(i*83+(t*90)%w)%w;ctx.strokeStyle='rgba(150,255,90,.13)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,430);ctx.lineTo(x-35,540);ctx.stroke()}
+  const clash=(Math.sin(t*2.2)>0.82), pulse=.5+.5*Math.sin(t*7);
+  fighter(285+Math.sin(t*1.5)*25,430,t,'#7dff42',0,0);
+  fighter(675-Math.sin(t*1.5)*25,430,t,'#f4f4f4',1,2);
+  // energy bolts
+  for(let i=0;i<9;i++){let a=t*2+i*Math.PI*2/9;ctx.strokeStyle=i%2?'#9aff54':'#b9caff';ctx.lineWidth=3;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=14;ctx.beginPath();ctx.moveTo(285+Math.cos(a)*45,300+Math.sin(a)*65);ctx.lineTo(285+Math.cos(a)* (65+Math.sin(t*8+i)*14),300+Math.sin(a)*95);ctx.stroke();ctx.beginPath();ctx.moveTo(675+Math.cos(a)*45,300+Math.sin(a)*65);ctx.lineTo(675+Math.cos(a)*(65+Math.cos(t*8+i)*14),300+Math.sin(a)*95);ctx.stroke()}
+  ctx.shadowBlur=0;
+  // central energy collision pulse
+  let radius=25+((t*100)%110);ctx.strokeStyle=`rgba(151,255,77,${.45-pulse*.2})`;ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,330,radius,0,Math.PI*2);ctx.stroke();
+  if(clash){ctx.fillStyle=`rgba(220,255,200,${.08+pulse*.18})`;ctx.fillRect(0,0,w,h)}
+  ctx.fillStyle='#f5f7ff';ctx.font='bold 30px system-ui';ctx.textAlign='center';ctx.fillText('ANIME BATTLE',480,52);
+  ctx.font='18px system-ui';ctx.fillStyle='#9cff61';ctx.fillText('GREEN ENERGY',285,500);ctx.fillStyle='#dce7ff';ctx.fillText('GEAR AURA',675,500);
+  ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.65)';ctx.font='14px system-ui';ctx.fillText('LIVE PROCEDURAL ANIMATION • DEMO',22,28);
+  raf=requestAnimationFrame(draw);
+}
+function start(){cancelAnimationFrame(raf);started=performance.now();raf=requestAnimationFrame(draw)}
+$('play').onclick=()=>{start();$('status').textContent='Анимация запущена прямо в браузере.'};
+$('prepare').onclick=()=>{const p=$('prompt').value.trim();if(!p){$('status').textContent='Сначала добавь описание сцены.';return}
+prepared=`${p}\nДлительность: ${$('duration').value}\nФормат: ${$('ratio').value}\nСтиль: плавная процедурная аниме-анимация, динамичная камера, энергетические эффекты.`;
+$('status').textContent='Сцена подготовлена. Запусти анимацию или сохрани видео WebM.';$('bar').style.width='100%';$('copy').disabled=false;$('save').disabled=false;start()};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(prepared);$('status').textContent='Описание сцены скопировано.'}catch(e){$('status').textContent='Не удалось скопировать автоматически.'}};
+$('save').onclick=()=>{const blob=new Blob([JSON.stringify({prompt:prepared,duration:$('duration').value,ratio:$('ratio').value},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='animemotion-project.json';a.click();URL.revokeObjectURL(a.href)};
+$('record').onclick=()=>{if(!canvas.captureStream||!window.MediaRecorder){$('status').textContent='Запись видео не поддерживается этим браузером. Открой страницу в актуальном Chrome или Safari.';return}
+start();const stream=canvas.captureStream(30);let mime='video/webm;codecs=vp9';if(!MediaRecorder.isTypeSupported(mime))mime='video/webm';try{recorder=new MediaRecorder(stream,{mimeType:mime});chunks=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='animemotion-scene.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);$('status').textContent='Видео сохранено в формате WebM.'};recorder.start();$('status').textContent='Идёт запись 8 секунд…';setTimeout(()=>{if(recorder&&recorder.state==='recording')recorder.stop()},8000)}catch(e){$('status').textContent='Браузер не разрешил запись. Попробуй другой браузер.'}};
+start();
+// Draw an initial frame immediately so the preview is not blank while the first animation frame is scheduled.
+draw(performance.now());
+</script>
+</body></html>
